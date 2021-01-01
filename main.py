@@ -19,7 +19,7 @@ def findImage(localPgnFile):
 
     xCord = 0
     yCord = 0
-    for i in range(5):
+    for i in range(4):
         try:
             xCord, yCord = pyautogui.locateCenterOnScreen(localPgnFile);
             print(xCord, yCord);
@@ -60,23 +60,26 @@ def isFindingMatch():
 
 def isClientOpen():
     # wait 8 seconds and check if game is loading
-    time.sleep(3)
+
     boolean = findImageBoolean('./Resources/images/League_Client_Open_Text.PNG')
     print(boolean)
     return boolean
 
 def waitForStatus3_2():
-    #wait initial 20 minutues
-    #time.sleep(1200)
-    #iterate every minute until found
+    initialTime = time.time()
+    currentTime = 0;
     while True:
 
         imageFound = findImageBoolean('./Resources/images/3-2_Stage_Text.PNG')
         if imageFound:
             print('Reached Status 3-2')
             break;
+        elif currentTime > 1200:
+            break;
         else:
-            time.sleep(60)
+            time.sleep(20)
+        currentTime = initialTime - time.time()
+        print('waitingFor3-2 Time: ' + str(currentTime))
 
 def surrender():
     #press esc
@@ -99,9 +102,14 @@ def navigateToTFT():
     findImageAndClick('./Resources/images/Confirm_Button.PNG');
 
 def findMatch():
+    time.sleep(3)
 
-    #Find Match
-    findImageAndClick('./Resources/images/Find_Match_Button.PNG');
+    while True:
+        #Find Match
+        boolean = findImageAndClick('./Resources/images/Find_Match_Button.PNG');
+        if boolean:
+            break;
+
 
 def waitFormatch():
     # Loop till match is found for n time
@@ -118,7 +126,7 @@ def waitFormatch():
             break;
 
         findImageAndClick('./Resources/images/Accept_Button.PNG');
-        time.sleep(3)
+
 
         timeDiference = time.time() - initialTime;
         print(timeDiference)
@@ -128,7 +136,11 @@ def waitFormatch():
 
 def playAgain():
     time.sleep(3)
-    findImageAndClick('./Resources/images/Play_Again_Button.PNG')
+    while True:
+
+        boolean = findImageAndClick('./Resources/images/Play_Again_Button.PNG')
+        if boolean:
+            break;
 
 def main():
 
@@ -148,7 +160,7 @@ def main():
 
         playAgain();
 
-        numeroPartida =+ 1;
+        numeroPartida = numeroPartida + 1;
 
 
 
